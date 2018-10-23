@@ -1,6 +1,7 @@
 <?php
     include("assets/includes/db.php");
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,57 +18,70 @@
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 
     <!-- Your own CSS file -->
-    <link rel="stylesheet" type="text/css" href="assets/css/Styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-	<title>Personal WBS</title>
+	<title>WBS monitor</title>
 </head>
 <body>
     <h1 id = "test"></h1>
     <div class="container">
 
-        <h1>Personal WBS</h1>
+        <h1>WBS monitor</h1>
+        <hr>
+        <input type="button" id="js-update-shows" class="btn btn-success" value="Add a project" />  
         <table class="table">
             <tr>
                 <td>Id</td>
                 <td>Name</td>
-                <td>Estimated Time</td>
-                <td>Actual Time</td>
+                <td>Estimated time</td>
+                <td>Actual time</td>
                 <td>View</td>
-                <td>Add Task</td>
+                <td>Add</td>
                 <td>Delete</td>
             </tr>
 
             <!-- Form used for serialize() -->
             <form id="update-shows-form">
-                    <input type="hidden" name="showId[]" value="<?php echo $row['id']; ?>" />
+
+                <!-- Shows example -->
+                <?php 
+
+                    $getShows = "SELECT * FROM `projects`";
+
+                    $result = mysqli_query($con, $getShows);
+
+                    while($row = mysqli_fetch_assoc($result))
+                    {   
+
+                ?>
+                    <input type="hidden" name="projectId[]" value="<?php echo $row['projectId']; ?>" />
                     <tr>
                         <td>
-                            <?php echo $row['id']; ?>
+                            <?php echo $row['projectId']; ?>
                         </td>
                         <td>
-                            <input type="text" class="show-name" name="showName[]" value="<?php echo $row['name']; ?>">
+                            <input type="text" class="show-name" name="projectName[]" value="<?php echo $row['projectName']; ?>">
                         </td>
                         <td>
-                            <input type="text" class="show-release-date" name="showReleaseDate[]" value="<?php echo $row['release_date']; ?>">
+                            <input type="text" class="show-release-date" name="projectEstimatedTime[]" value="<?php echo $row['projectEstimatedTime']; ?>">
                         </td>
                         <td>
-                            <input type="text" class="show-poster" name="showPoster[]" value="<?php echo $row['poster']; ?>">
+                            <input type="text" class="show-poster" name="projectActualTime[]" value="<?php echo $row['projectActualTime']; ?>">
                         </td>
                         <td>
                             <input type="button" class="btn btn-success" name="View" value="View">
                         </td>
                         <td>
-                            <input type="button" class="btn btn-success" name="Add" value="Add">
+                            <input type="button" class="btn btn-success" name="Add task" value="Add task">
                         </td>
                         <td>
                             <input type="button" class="btn btn-success" name="Delete" value="Delete">
                         </td>
                     </tr>
+                    </tr>
                 <?php }  ?>
             </form>
         </table> 
-
-        <input type="button" id="js-update-shows" class="btn btn-success" value="Add Show" />   
     </div>
     
 	<!-- jQuery -->
