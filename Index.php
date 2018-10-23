@@ -1,7 +1,6 @@
 <?php
-    include("includes/db.php");
+    include("assets/includes/db.php");
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,10 +14,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS Twitter Bootstrap FrameWork-->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 
     <!-- Your own CSS file -->
-    <link rel="stylesheet" type="text/css" href="../Css/Styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/Styles.css">
 
 	<title>Personal WBS</title>
 </head>
@@ -40,18 +39,6 @@
 
             <!-- Form used for serialize() -->
             <form id="update-shows-form">
-
-                <!-- Shows example -->
-                <?php 
-
-                    $getShows = "SELECT * FROM `showinfo`";
-
-                    $result = mysqli_query($con, $getShows);
-
-                    while($row = mysqli_fetch_assoc($result))
-                    {   
-
-                ?>
                     <input type="hidden" name="showId[]" value="<?php echo $row['id']; ?>" />
                     <tr>
                         <td>
@@ -84,9 +71,9 @@
     </div>
     
 	<!-- jQuery -->
-	<script src="js/jquery-3.1.0.min.js"></script>
+	<script src="assets/js/jquery-3.1.0.min.js"></script>
 
     <!-- Custom js  -->
-    <script src="js/main.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
