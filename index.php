@@ -36,7 +36,7 @@
             <div class="btn btn-success project-save">Save projects</div>
 	    </div>
 
-		<script src="assets/lib/jquery/jquery-3.3.1.slim.min.js"></script>
+		<script src="assets/lib/jquery/jquery-3.3.1.js"></script>
 		<script src="assets/lib/popper/popper.min.js"></script>
 		<script src="assets/lib/bootstrap/bootstrap.min.js"></script>
 

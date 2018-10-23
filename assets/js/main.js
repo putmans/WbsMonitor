@@ -45,14 +45,14 @@ function onProjectSaveButtonClick()
 function saveProjects()
 {
 	$.ajax(
-		{
-			method: "POST",
-			url: "assets/inc/saveProjects.php",
-			datatype: "JSON",
-			data: $("#form-projects").serialize(),
-			success: onProjectSaveCallBack,
-			error: onProjectSaveFailCallBack
-		});
+	{
+		method: "POST",
+		url: "assets/inc/saveProjects.php",
+		datatype: "JSON",
+		data: $("#form-projects").serialize(),
+		success: onProjectSaveCallBack,
+		error: onProjectSaveFailCallBack
+	});
 }
 
 function onProjectSaveCallBack(result)
