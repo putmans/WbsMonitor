@@ -39,13 +39,17 @@ var currentProjectTemplate = $(`
         	<div class="btn btn-success">Add task</div>
         </td>
         <td>
-        	<div class="btn btn-danger">Remove project</div>
+        	<div class="btn btn-danger project-existing-remove">Remove project</div>
         </td>
     </tr>
 `);
 
+// Global vars
+var notifyTimer;
+
 function init()
 {
+	$("#notification").hide();
 	$("#project-add").on("click", onProjectAddButtonClick);
 }
 
@@ -58,9 +62,21 @@ function onProjectAddButtonClick()
 	$(".project-save").off().on("click", onProjectSaveButtonClick);
 }
 
+// This function removes the preview object from the table
 function onProjectRemoveButtonClick()
 {
 	$(this).parent().parent().remove();
+}
+
+// This function removes an existing project from the database
+function onExistingProjectRemoveButtonClick()
+{
+	var projectId = $(this).data("project-id");
+
+	if ( projectId !== undefined )
+	{
+		deleteProject(projectId);
+	}
 }
 
 function onProjectSaveButtonClick()
@@ -93,6 +109,51 @@ function fetchProjects()
 	});
 }
 
+function deleteProject(projectId)
+{
+	$.ajax(
+	{
+		method: "POST",
+		url: "assets/inc/deleteProject.php",
+		datatype: "JSON",
+		data: { projectId: projectId },
+		success: function(result)
+		{
+			var data = JSON.parse(result);
+
+			if ( data.status == 200 )
+			{
+				notifyUser("Project was successfully deleted");
+				fetchProjects();
+			}
+			else
+			{
+				notifyUser("Could not delete project yo");
+			}
+		},
+		error: function(jqXhr, error, errorStr)
+		{
+			console.log(error + ": " + errorStr);
+		}
+	});
+}
+
+function notifyUser(userNote)
+{
+	$("#notification p").text(userNote);
+	$("#notification").slideDown(250, function()
+		{
+			notifyTimer = setTimeout(hideNotification, 2000);
+		});
+}
+
+function hideNotification()
+{
+	$("#notification").slideUp(250)
+}
+
+// Appends each existing project to a project template and inserts
+// it into a nice table row cus that's how we roll
 function onProjectFetchCallBack(data)
 {
 	var projects = JSON.parse(data);
@@ -106,9 +167,12 @@ function onProjectFetchCallBack(data)
 		newProject.find(".project-id").text(v.projectId);
 		newProject.find(".project-name").text(v.projectName);
 		newProject.find(".project-estimatedTime").text(v.projectEstimatedTime);
+		newProject.find(".project-existing-remove").data("project-id", v.projectId);
 
 		$("#project-table > tbody").append(newProject);
 	});
+
+	$(".project-existing-remove").off().on("click", onExistingProjectRemoveButtonClick);
 }
 
 function onProjectSaveCallBack(data)
@@ -117,6 +181,7 @@ function onProjectSaveCallBack(data)
 
 	if ( result.status == 200 )
 	{
+		notifyUser("Project(s) added");
 		fetchProjects();
 	}
 	else
@@ -132,4 +197,6 @@ function onProjectFailCallBack(jqXhr, error, errorStr)
 
 // Events
 $(document).ready(init);
+
+// Fetch all projects
 fetchProjects();

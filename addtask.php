@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>WBS Monitor</title>
+		<title>WBS Monitor - Add task</title>
 
 		<link rel="stylesheet" href="assets/lib/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" href="assets/css/style.css">
@@ -12,7 +12,7 @@
 	<body>
 	    <div class="container">
 
-	        <h1>WBS Monitor</h1>
+	        <h1>WBS Monitor - Add task</h1>
 	        <hr>
 
 	        <div id="notification">
