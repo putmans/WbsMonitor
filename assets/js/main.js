@@ -1,49 +1,3 @@
-var projectTemplate = $(`
-	<tr>
-        <td>
-            <input type="text" class="project-id" name="project-id[]" value="-1" disabled>
-        </td>
-        <td>
-            <input type="text" class="project-name" name="project-name[]" value="">
-        </td>
-        <td>
-            <input type="text" class="project-estimatedTime" name="project-estimatedTime[]" value="">
-        </td>
-        <td>
-        	<input type="text" class="project-actualTime" name="project-actualTime[]" value="-1" disabled>
-        </td>
-        <td colspan="3">
-        	<div class="btn btn-danger project-remove">Remove project</div>
-        </td>
-    </tr>
-`);
-
-var currentProjectTemplate = $(`
-	<tr>
-        <td>
-            <p class="project-id"></p>
-        </td>
-        <td>
-            <p class="project-name"></p>
-        </td>
-        <td>
-            <p class="project-estimatedTime"></p>
-        </td>
-        <td>
-        	<p class="project-actualTime"></p>
-        </td>
-        <td>
-        	<div class="btn btn-info">View project</div>
-        </td>
-        <td>
-        	<div class="btn btn-success">Add task</div>
-        </td>
-        <td>
-        	<div class="btn btn-danger project-existing-remove">Remove project</div>
-        </td>
-    </tr>
-`);
-
 // Global vars
 var notifyTimer;
 
@@ -117,6 +71,7 @@ function deleteProject(projectId)
 		url: "assets/inc/deleteProject.php",
 		datatype: "JSON",
 		data: { projectId: projectId },
+
 		success: function(result)
 		{
 			var data = JSON.parse(result);
@@ -131,6 +86,7 @@ function deleteProject(projectId)
 				notifyUser("Could not delete project yo");
 			}
 		},
+
 		error: function(jqXhr, error, errorStr)
 		{
 			console.log(error + ": " + errorStr);
@@ -168,6 +124,7 @@ function onProjectFetchCallBack(data)
 		newProject.find(".project-name").text(v.projectName);
 		newProject.find(".project-estimatedTime").text(v.projectEstimatedTime);
 		newProject.find(".project-existing-remove").data("project-id", v.projectId);
+		newProject.find(".link-project-id").attr("href", "addtask.php?projectId=" + v.projectId);
 
 		$("#project-table > tbody").append(newProject);
 	});
@@ -182,12 +139,17 @@ function onProjectSaveCallBack(data)
 	if ( result.status == 200 )
 	{
 		notifyUser("Project(s) added");
-		fetchProjects();
+	}
+	else if ( result.status == 301 )
+	{
+		notifyUser("Could not add one or more projects, make sure every field is filled in correctly.");
 	}
 	else
 	{
-		// Show error message
+		notifyUser("Failed to add project(s), please try again.");
 	}
+
+	fetchProjects();
 }
 
 function onProjectFailCallBack(jqXhr, error, errorStr)

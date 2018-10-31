@@ -26,7 +26,7 @@ for ( $i = 0; $i < count( $projectNames ); $i++ )
  	}
  	else
  	{
- 		// Show required message
+ 		$status = 301;
  	}
 }
 

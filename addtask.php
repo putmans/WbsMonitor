@@ -1,5 +1,15 @@
 <?php
+	if ( !isset( $_GET["projectId"] ) )
+	{
+		header("Location: index.php");
+		die();
+	}
+
+	// Requirements
 	require_once("assets/inc/mysqli.php");
+
+	// Init vars
+	$projectId = $_GET["projectId"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,16 +29,22 @@
 	        	<p></p>
 	        </div>
 
-	        <form id="form-projects">
-		        <table class="table" id="project-table">
+	        <form id="form-tasks">
+		        <table class="table" id="task-table">
+		        	<input type="hidden" name="project-id" value="<?php echo $projectId; ?>">
+
 		        	<thead>
 			            <tr>
 			                <th>#</th>
-			                <th>Name</th>
-			                <th>Estimated time</th>
-			                <th>Actual time</th>
-			                <th>View details</th>
-			                <th>Add task</th>
+			                <th>Task</th>
+			                <th>PreDecessor</th>
+			                <th>Task Owner</th>
+			                <th>MoSCoW</th>
+			                <th>Plan (min)</th>
+			                <th>Do (min)</th>
+			                <th>Check</th>
+			                <th>Act</th>
+			                <th>Start</th>
 			                <th>Delete</th>
 			            </tr>
 			        </thead>
@@ -37,14 +53,16 @@
 		        </table> 
 	        </form>
 
-	        <div class="btn btn-success" id="project-add">Add project</div>
-            <div class="btn btn-success project-save">Save projects</div>
+	        <div class="btn btn-success" id="task-add">Add task</div>
+            <div class="btn btn-success task-save">Save all tasks</div>
+            <a href="index.php"><div class="btn btn-info">Return to projects overview</div></a>
 	    </div>
 
 		<script src="assets/lib/jquery/jquery-3.3.1.js"></script>
 		<script src="assets/lib/popper/popper.min.js"></script>
 		<script src="assets/lib/bootstrap/bootstrap.min.js"></script>
 
-		<script src="assets/js/main.js"></script>
+		<script src="assets/js/templates.js"></script>
+		<script src="assets/js/task.js"></script>
 	</body>
 </html>

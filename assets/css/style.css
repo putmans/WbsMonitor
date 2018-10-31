@@ -2,3 +2,15 @@
 	margin: 10px 0 10px 0;
 	padding: 10px 20px;
 }
+
+.project-id, .task-id, .task-preDecessor {
+	width: 70px;
+}
+
+input[type="text"], select, textarea {
+	height: auto;
+	min-height: 50px;
+	padding-left: 7px;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+}
