@@ -20,7 +20,7 @@
 		<link rel="stylesheet" href="assets/css/style.css">
 	</head>
 	<body>
-	    <div class="container">
+	    <div class="container-fluid">
 
 	        <h1>WBS Monitor - Add task</h1>
 	        <hr>
@@ -50,6 +50,19 @@
 			        </thead>
 			        <tbody>
 		            </tbody>
+		            <tfoot>
+		            	<td></td>
+		            	<td></td>
+		            	<td></td>
+		            	<td></td>
+		            	<td></td>
+		            	<td class="time-total-planned">00:00:00</td>
+		            	<td class="time-total-actual">00:00:00</td>
+		            	<td></td>
+		            	<td></td>
+		            	<td></td>
+		            	<td></td>
+		            </tfoot>
 		        </table> 
 	        </form>
 
@@ -61,7 +74,9 @@
 		<script src="assets/lib/jquery/jquery-3.3.1.js"></script>
 		<script src="assets/lib/popper/popper.min.js"></script>
 		<script src="assets/lib/bootstrap/bootstrap.min.js"></script>
+		<script src="assets/lib/timer.jquery/timer.jquery.min.js"></script>
 
+		<script src="assets/js/utils.js"></script>
 		<script src="assets/js/templates.js"></script>
 		<script src="assets/js/task.js"></script>
 	</body>

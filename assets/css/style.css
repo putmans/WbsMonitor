@@ -3,8 +3,12 @@
 	padding: 10px 20px;
 }
 
-.project-id, .task-id, .task-preDecessor {
+.project-id, .task-id, .task-preDecessor, .task-owner {
 	width: 70px;
+}
+
+.task-plan, .task-do {
+	width: 100px;
 }
 
 input[type="text"], select, textarea {

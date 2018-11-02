@@ -1,6 +1,7 @@
 // Global vars
 var notifyTimer;
 var projectId;
+var checkTimer;
 
 function init()
 {
@@ -8,6 +9,7 @@ function init()
 
 	$("#notification").hide();
 	$("#task-add").on("click", onTaskAddButtonClick);
+	$(".task-save").off().on("click", onTaskSaveButtonClick);
 
 	fetchTasks();
 }
@@ -18,7 +20,6 @@ function onTaskAddButtonClick()
 
 	// Add task events again
 	$(".task-remove").off().on("click", onTaskRemoveButtonClick);
-	$(".task-save").off().on("click", onTaskSaveButtonClick);
 }
 
 // This function removes the preview object from the table
@@ -44,9 +45,7 @@ function onTaskSaveButtonClick()
 }
 
 function saveTasks()
-{
-	console.log($("#form-tasks").serialize());
-	
+{	
 	$.ajax(
 	{
 		method: "POST",
@@ -84,7 +83,7 @@ function deleteTask(taskId)
 		{
 			var data = JSON.parse(result);
 
-			if ( data.status == 200 )
+			if ( data.status == 200 ) // HTTP STATUS CODE OK, BRO
 			{
 				notifyUser("Task was successfully deleted");
 				fetchTasks();
@@ -102,6 +101,9 @@ function deleteTask(taskId)
 	});
 }
 
+// These 2 functions handle notifications mayn
+// u know what it iiiiiis
+// self explanatory dont need these comments boiii / Jesse @ 23:22
 function notifyUser(userNote)
 {
 	$("#notification p").text(userNote);
@@ -138,13 +140,102 @@ function onTaskFetchCallBack(data)
 		newTask.find(".task-do").val(v.taskActualTime);
 		newTask.find(".task-check").val(v.taskCheckNote);
 		newTask.find(".task-act").val(v.taskActNote);
-
-		console.log("Moscow type: " + v.taskMoscowType);
+		newTask.find(".task-existing-remove").data("task-id", v.taskId);
+		newTask.find(".task-do").data("task-timer-enabled", false)
+		newTask.find(".task-do").data("task-timer-start", hmsToSecondsOnly(v.taskActualTime));
 
 		$("#task-table > tbody").append(newTask);
 	});
 
+	initTaskTimers();
+	initTaskTimerCheck();
+	updateTaskTotalTime();
+
 	$(".task-existing-remove").off().on("click", onExistingTaskRemoveButtonClick);
+	$(".task-start").off().on("click", onTaskStartButtonClick);
+}
+
+// UPDATES TOTAL TASK TIME (ACTUAL TIME AND PLANNED TIME)
+// ALSO SELF EXPLNATORY IF YOU READ THE FUNCTION NAMe
+function updateTaskTotalTime()
+{
+	var totalTimeActualSeconds = 0;
+	var totalTimePlannedSeconds = 0;
+
+	// Actual time
+	$.each($(".task-do"), function(index,elem)
+	{
+		var actualTimeInSeconds = hmsToSecondsOnly($(elem).val());
+		var plannedTimeInSeconds = hmsToSecondsOnly($(elem).parent().parent().find(".task-plan").val());
+
+		totalTimeActualSeconds += actualTimeInSeconds;
+		totalTimePlannedSeconds += plannedTimeInSeconds;
+	});
+
+	$(".time-total-actual").text( secondsTimeSpanToHMS(totalTimeActualSeconds) );
+	$(".time-total-planned").text( secondsTimeSpanToHMS(totalTimePlannedSeconds) );
+}
+
+// This function compares each tasks' planned time and total time
+// if the tasks' current time is greater than the planned time
+// this function will change the tasks' row bg to red
+function initTaskTimerCheck()
+{
+	$.each($(".task-do"), function(index, elem)
+	{
+		var currentTime = $(elem).data('seconds');
+    	var plannedTime = $(elem).parent().parent().find(".task-plan").val();
+    	var plannedTimeInSeconds = hmsToSecondsOnly(plannedTime);
+
+    	if ( currentTime > plannedTimeInSeconds )
+    	{
+    		$(elem).parent().parent().css("background-color", "rgba(255, 0, 0, 0.5)");
+    	}
+    	else
+    	{
+    		// Optional else condition, won't need it if you decide to make times un-editable / Jesse
+    		$(elem).parent().parent().css("background-color", "rgba(255, 255, 255, 1)");
+    	}
+	});
+
+	updateTaskTotalTime();
+	checkTimer = setTimeout(initTaskTimerCheck, 500);
+}
+
+// this function will initialize each tasks' timers
+function initTaskTimers()
+{
+	$.each($(".task-do"), function(index, elem)
+	{
+		var currentTime = $(elem).data("task-timer-start");
+
+		$(elem).timer({
+		    format: '%H:%M:%S',
+		    seconds: currentTime
+		});
+
+		$(elem).timer("pause");
+	});
+}
+
+// handles tasks' start timer button click, and changes text & status according to timer status
+function onTaskStartButtonClick()
+{
+	var taskTimer = $(this).parent().parent().find(".task-do");
+	var taskTimerEnabled = $(this).parent().parent().find(".task-do").data("task-timer-enabled");
+
+	if ( !taskTimerEnabled )
+	{
+		taskTimer.timer("resume");
+		$(this).addClass("btn-danger").removeClass("btn-success").text("Pause");
+	}
+	else
+	{
+		taskTimer.timer("pause");
+		$(this).removeClass("btn-danger").addClass("btn-success").text("Resume");
+	}
+
+	taskTimer.data("task-timer-enabled", !taskTimerEnabled);
 }
 
 function onTaskSaveCallBack(data)
@@ -153,7 +244,7 @@ function onTaskSaveCallBack(data)
 
 	if ( result.status == 200 )
 	{
-		notifyUser("Task(s) added");
+		notifyUser("Task(s) saved");
 		fetchTasks();
 	}
 	else
@@ -165,6 +256,29 @@ function onTaskSaveCallBack(data)
 function onTaskFailCallBack(jqXhr, error, errorStr)
 {
 	console.log(error + ": " + errorStr);
+}
+
+// Stackoverflow: https://stackoverflow.com/a/9640417
+function hmsToSecondsOnly(str) {
+    var p = str.split(':'),
+        s = 0, m = 1;
+
+    while (p.length > 0) {
+        s += m * parseInt(p.pop(), 10);
+        m *= 60;
+    }
+
+    return s;
+}
+
+// StackOverflow: https://stackoverflow.com/questions/11792726/turn-seconds-into-hms-format-using-jquery
+// Modified & added hour zero padding too / Jesse
+function secondsTimeSpanToHMS(s) {
+    var h = Math.floor(s/3600); //Get whole hours
+    s -= h*3600;
+    var m = Math.floor(s/60); //Get remaining minutes
+    s -= m*60;
+    return (h < 10 ? '0'+h : h)+":"+(m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); // zero padding on minutes and seconds (added hours too / Jesse)
 }
 
 // Events

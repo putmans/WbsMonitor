@@ -116,7 +116,9 @@ function onProjectFetchCallBack(data)
 
 	$("#project-table > tbody").empty();
 
-	$.each(projects, function(i, v)
+	console.log(projects);
+
+	$.each(projects["projects"], function(i, v)
 	{
 		var newProject = currentProjectTemplate.clone();
 
@@ -125,6 +127,8 @@ function onProjectFetchCallBack(data)
 		newProject.find(".project-estimatedTime").text(v.projectEstimatedTime);
 		newProject.find(".project-existing-remove").data("project-id", v.projectId);
 		newProject.find(".link-project-id").attr("href", "addtask.php?projectId=" + v.projectId);
+		newProject.find(".project-actualTime").text(secondsTimeSpanToHMS(v.projectActualTimeInSeconds));
+		newProject.find(".project-estimatedTime").text(secondsTimeSpanToHMS(v.projectPlannedTimeInSeconds));
 
 		$("#project-table > tbody").append(newProject);
 	});

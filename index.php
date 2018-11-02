@@ -45,6 +45,7 @@
 		<script src="assets/lib/popper/popper.min.js"></script>
 		<script src="assets/lib/bootstrap/bootstrap.min.js"></script>
 
+		<script src="assets/js/utils.js"></script>
 		<script src="assets/js/templates.js"></script>
 		<script src="assets/js/main.js"></script>
 	</body>
