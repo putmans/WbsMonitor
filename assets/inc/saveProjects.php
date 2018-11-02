@@ -7,17 +7,15 @@ if ( !isset( $_POST["project-name"] ) )
 require_once( "mysqli.php" );
 
 $status = 200;
-$projectNames 			= $_POST["project-name"];
-$projectEstimatedTimes 	= $_POST["project-estimatedTime"];
+$projectNames = $_POST["project-name"];
 
 for ( $i = 0; $i < count( $projectNames ); $i++ )
 {
 	$projectName = $projectNames[$i];
-	$projectEstimatedTime = $projectEstimatedTimes[$i];
 
- 	if ( !empty( $projectName ) && !empty( $projectEstimatedTime ) )
+ 	if ( !empty( $projectName ) )
  	{
- 		$result = $mysqli->query("INSERT INTO projects (projectName, projectEstimatedTime) VALUES ('$projectName', '$projectEstimatedTime')");
+ 		$result = $mysqli->query("INSERT INTO projects (projectName) VALUES ('$projectName')");
 
  		if ( !$result )
  		{
