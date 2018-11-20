@@ -102,7 +102,6 @@ function deleteTask(taskId)
 }
 
 // These 2 functions handle notifications mayn
-// u know what it iiiiiis
 // self explanatory dont need these comments boiii / Jesse @ 23:22
 function notifyUser(userNote)
 {

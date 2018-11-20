@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 02 nov 2018 om 09:20
+-- Gegenereerd op: 09 nov 2018 om 09:18
 -- Serverversie: 5.7.14
 -- PHP-versie: 7.0.10
 
@@ -31,7 +31,7 @@ USE `wbsmonitor`;
 CREATE TABLE `projects` (
   `projectId` int(11) NOT NULL,
   `projectName` varchar(30) NOT NULL,
-  `projectEstimatedTime` time NOT NULL,
+  `projectEstimatedTime` time NOT NULL DEFAULT '00:00:00',
   `projectActualTime` time NOT NULL DEFAULT '00:00:00',
   `projectDeleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -65,7 +65,10 @@ INSERT INTO `projects` (`projectId`, `projectName`, `projectEstimatedTime`, `pro
 (22, 'yaw', '10:00:00', '00:00:00', 1),
 (23, 'Test', '00:00:10', '00:00:00', 0),
 (24, 'Yawwww', '00:10:00', '00:00:00', 0),
-(25, 'hey', '10:00:00', '00:00:00', 0);
+(25, 'hey', '10:00:00', '00:00:00', 0),
+(26, 'test', '00:00:00', '00:00:00', 1),
+(27, 'test', '00:00:00', '00:00:00', 1),
+(28, 'nieuwe test', '00:00:00', '00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -106,18 +109,21 @@ INSERT INTO `tasks` (`taskId`, `taskName`, `taskPredecessor`, `taskOwner`, `task
 (12, '', 0, '', 0, '00:00:00', '00:00:00', '', '', 6, 0),
 (13, 'Een test task', 0, 'Jesse', 1, '00:00:00', '00:00:00', 'HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', '', 23, 1),
 (14, 'aaaa', 0, 'Han', 0, '10:00:00', '00:00:34', '', 'yaw', 23, 0),
-(15, 'bbb', 0, 'Han', 3, '00:01:20', '00:01:23', 'hallo', '', 23, 0),
+(15, 'bbb', 0, 'Han', 3, '00:01:20', '00:01:23', 'hallo', '', 23, 1),
 (16, 'Nog een', 0, 'Jesse', 0, '00:00:00', '00:00:12', 'aweo', 'awooo', 23, 1),
 (17, 'En nog een', 0, 'Jesse', 1, '00:00:00', '00:00:00', '', '', 23, 1),
 (18, 'aa', 0, 'eee', 0, '00:00:00', '00:00:00', '', '', 23, 1),
 (19, '', 0, '', 0, '00:00:00', '00:00:03', '', '', 23, 1),
 (20, '', 0, '', 0, '00:00:00', '00:00:00', '', '', 23, 1),
-(21, 'Afbeelding toevoegen', 0, 'Jesse', 1, '00:01:00', '00:00:33', 'ddd', 'ddddd', 23, 0),
+(21, 'Afbeelding toevoegen', 0, 'Jesse', 1, '00:01:00', '00:00:33', 'ddd', 'ddddd', 23, 1),
 (22, 'Jesse task test', 0, 'Jesse', 1, '00:00:05', '00:00:04', 'Yawwww', 'wwwww', 24, 0),
 (23, 'eee', 0, '', 0, '00:00:00', '00:00:00', '', '', 24, 1),
 (24, 'Niks', 0, 'ee', 0, '00:00:20', '00:00:10', 'e', 'e', 25, 0),
 (25, '', 0, '', 0, '00:00:00', '00:00:00', '', '', 25, 1),
-(26, '', 0, '', 0, '00:00:00', '00:00:03', '', '', 25, 0);
+(26, '', 0, '', 0, '00:00:00', '00:00:03', '', '', 25, 0),
+(27, 'Hallo', 0, 'Jesse', 0, '00:00:05', '00:00:07', 'eeee', 'eeeeeee', 28, 0),
+(28, 'Hallo', 2, 'Jesse', 0, '00:20:00', '00:00:00', 'yo', 'yo', 28, 0),
+(29, '', 0, '', 0, '00:00:00', '00:00:00', '', '', 28, 0);
 
 --
 -- Indexen voor geëxporteerde tabellen
@@ -145,12 +151,12 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT voor een tabel `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `projectId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `projectId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT voor een tabel `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- Beperkingen voor geëxporteerde tabellen
 --
